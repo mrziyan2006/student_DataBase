@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  student-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: student_db_backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - ./student_database.db:/app/student_database.db
+      - ./chroma_db:/app/chroma_db
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
